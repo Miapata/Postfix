@@ -1,82 +1,71 @@
 #include "pch.h"
 
-#include <iostream>
+// C++ program to evaluate value of a postfix expression  
+#include <iostream>  
+#include <string.h>  
 #include <stack>
 #include <string>
 using namespace std;
 
+
 stack<int> ourStack;
+
+// The main function that returns value of a given postfix expression  
+int evaluatePostfix(string exp)
+{
+	// Create a stack of capacity equal to expression size  
+
+	int i;
+
+	// See if stack was created successfully  
+
+
+	// Scan all characters one by one  
+	for (i = 0; exp[i]; ++i)
+	{
+		char charWeAreEvaluating = exp[i];
+		// If the scanned character is an operand (number here),  
+		// push it to the stack.  
+		if (isdigit(exp[i]) && (isblank(exp[i + 1]) || exp[i + 1] == NULL)) {
+			ourStack.push(exp[i] - '0');
+		}
+
+
+
+		else if (isdigit(exp[i]) && isdigit(exp[i + 1])) {
+			ourStack.push((exp[i] - '0') + (exp[i + 1] - '0'));
+			i++;
+
+		}
+		else if (isblank(exp[i]))
+			break;
+		// If the scanned character is an operator, pop two  
+		// elements from stack apply the operator  
+		else
+		{
+			int val1 = ourStack.top();
+			ourStack.pop();
+			int val2 = ourStack.top();
+			ourStack.pop();
+			switch (exp[i])
+			{
+			case '+': ourStack.push(val2 + val1); break;
+			case '-': ourStack.push(val2 - val1); break;
+			case '*': ourStack.push(val2 * val1); break;
+			case '/': ourStack.push(val2 / val1); break;
+			}
+		}
+	}
+	return ourStack.top();
+}
+
+// Driver program to test above functions  
 int main()
 {
+	char exprChar[1000];
+	cin.getline(exprChar, 1000);
+	string exp = exprChar;
 
-	char expression[1000];
-
-
-
-	cin.getline(expression, 1000);
-	string expressionString = expression;
-
-
-	for (int i = 0; i < expressionString.length()-1; i++) {
-		char theChar = expressionString[i];
-		char proceedingChar = expressionString[i + 1];
-		cout << theChar << endl;
-		cout << proceedingChar << endl;
-		if (isdigit(theChar) && isdigit(proceedingChar)) {
-			int charValue = (theChar - 0) + (proceedingChar - 0);
-			ourStack.push(charValue);
-		}
-		else if (isdigit(theChar) && isblank(proceedingChar)) {
-			int charValue = theChar - 0;
-			ourStack.push(charValue);
-		}
-
-		int x;
-		int y;
-		int result;
-		switch (theChar)
-		{
-		case '+':
-
-
-			x = ourStack.top();
-			ourStack.pop();
-
-			y = ourStack.top();
-			ourStack.pop();
-
-			result = y + x;
-			ourStack.push(result);
-
-			break;
-
-		case'-':
-			x = ourStack.top();
-			ourStack.pop();
-
-			y = ourStack.top();
-			ourStack.pop();
-
-			result = y - x;
-			ourStack.push(result);
-			break;
-
-		case'*':
-			x = ourStack.top();
-			ourStack.pop();
-
-			y = ourStack.top();
-			ourStack.pop();
-
-			result = y * x;
-			ourStack.push(result);
-			break;
-
-		default:
-			break;
-		}
-
-	}
-	cout << ourStack.top();
+	cout << "postfix evaluation: " << evaluatePostfix(exp);
 	return 0;
 }
