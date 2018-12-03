@@ -15,47 +15,46 @@ int evaluatePostfix(string exp)
 {
 	// Create a stack of capacity equal to expression size  
 
-	int i;
+
 
 	// See if stack was created successfully  
 
 
 	// Scan all characters one by one  
-	for (i = 0; exp[i]; ++i)
+	string  multiDigit = "";
+	for (int i = 0; i < exp.length(); ++i)
 	{
-		char charWeAreEvaluating = exp[i];
-		// If the scanned character is an operand (number here),  
-		// push it to the stack.  
-		if (isdigit(exp[i]) && (isblank(exp[i + 1]) || exp[i + 1] == NULL)) {
-			ourStack.push(exp[i] - '0');
-		}
-
-
-
-		else if (isdigit(exp[i]) && isdigit(exp[i + 1])) {
-			ourStack.push((exp[i] - '0') + (exp[i + 1] - '0'));
-			i++;
+		if (isdigit(exp[i])) {
+			ourStack.push(exp[i]);
 
 		}
-		else if (isblank(exp[i]))
-			break;
+
+
 		// If the scanned character is an operator, pop two  
 		// elements from stack apply the operator  
 		else
 		{
 			int val1 = ourStack.top();
 			ourStack.pop();
+
 			int val2 = ourStack.top();
 			ourStack.pop();
+
 			switch (exp[i])
 			{
 			case '+': ourStack.push(val2 + val1); break;
 			case '-': ourStack.push(val2 - val1); break;
 			case '*': ourStack.push(val2 * val1); break;
 			case '/': ourStack.push(val2 / val1); break;
+			default: break;
 			}
 		}
 	}
+
+	// If the scanned character is an operand (number here),  
+	// push it to the stack.  
+
+
 	return ourStack.top();
 }
 
